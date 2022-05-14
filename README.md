@@ -45,6 +45,7 @@ something_else_description=I am something else but longer because I have descrip
 
 The vast majority of the translations are like this and have no further syntax. Please:
 
+* Do not translate the keys, only translate the phrases
 * Pay **very close attention** to capitalisation and punctuation
 * Ask on discord if you are unsure of the context of a phrase
 
