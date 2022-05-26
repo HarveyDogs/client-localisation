@@ -33,6 +33,8 @@ The default language bundle is `bundle.properties`, that means if we wanted to a
 to create a new file called `bundle_de.properties`, French it would be `bundle_fr.properties`, Russian 
 `bundle_ru.properties`, etc.
 
+If you are unsure what your language code is, please look at [Language Codes](https://developers.google.com/admin-sdk/directory/v1/languages)
+
 # How the file works
 
 So initially it's going to look really easy, there is simply a line by line tag to translation format (we call it a 
