@@ -17,7 +17,7 @@ in the correct properties files, we have a client that can run in multiple langu
 # Creating new language bundles
 
 Each translation is a file of the same name, but with the `language code` included with an underscore. You can find 
-lists the abbreviated java `language codes` on google, but to give a few examples here:
+lists the abbreviated java `language codes` in [here](https://developers.google.com/admin-sdk/directory/v1/languages), but to give a few examples here:
 
 ```
 English – en
@@ -32,8 +32,6 @@ Arabic – ar
 The default language bundle is `bundle.properties`, that means if we wanted to add a German translation we would have 
 to create a new file called `bundle_de.properties`, French it would be `bundle_fr.properties`, Russian 
 `bundle_ru.properties`, etc.
-
-If you are unsure what your language code is, please look at [Language Codes](https://developers.google.com/admin-sdk/directory/v1/languages)
 
 # How the file works
 
