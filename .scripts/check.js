@@ -6,7 +6,7 @@ const truthFile = fs.readFileSync(path.join(__dirname, '../bundle.properties'), 
 
 // The files to check. Only the pr's changed files will be checked
 const filesToCheck = process.argv.slice(2)
-  .map(v => fs.readFileSync(v, 'utf-8'))
+  // .map(v => fs.readFileSync(v, 'utf-8'))
 
 console.log(filesToCheck)
 
