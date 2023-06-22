@@ -7,7 +7,7 @@ on:
       - synchronize
 
 jobs:
-  analyze_pull_request:
+  check_syntax:
     runs-on: ubuntu-latest
 
     steps:
