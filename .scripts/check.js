@@ -17,19 +17,24 @@ const filesToCheck = process.argv.slice(2)
  * @param {string} file
  */
 function checkSyntax(file) {
-  const lines = file.split('\n')
-  let currentLine = 0
+  try {
+    const lines = file.split('\n')
+    let currentLine = 0
 
-  for (const line of lines) {
-    currentLine++
+    for (const line of lines) {
+      currentLine++
 
-    // Ignore empty lines and comments starting with '#'
-    if (line.trim() === '' || line.trim().startsWith('#') || line.trim().startsWith('!')) continue
+      // Ignore empty lines and comments starting with '#'
+      if (line.trim() === '' || line.trim().startsWith('#') || line.trim().startsWith('!')) continue
 
-    // Check for invalid syntax
-    if (!/^[\w.-]+\s*=\s*.+$/g.test(line)) {
-      throw new Error(`Invalid syntax at line ${currentLine}\n  > ${line.trim()}`)
+      // Check for invalid syntax
+      if (!/^[\w.-]+\s*=\s*.+$/g.test(line)) {
+        throw new Error(`Invalid syntax at line ${currentLine}\n  > ${line.trim()}`)
+      }
     }
+  } catch(err) {
+    console.error(err.message)
+    process.exit(1)
   }
 }
 
@@ -40,11 +45,16 @@ function checkSyntax(file) {
  * @param {string} file
  */
 function checkKeys(file) {
-  const keysToCheck = getKeys(file)
+  try {
+    const keysToCheck = getKeys(file)
 
-  for (const key of truthFileKeys) {
-    if (!keysToCheck.includes(key))
-      throw new Error(`Missing key: ${key}`)
+    for (const key of truthFileKeys) {
+      if (!keysToCheck.includes(key))
+        throw new Error(`Missing key: ${key}`)
+    }
+  } catch(err) {
+    console.error(err.message)
+    process.exit(1)
   }
 }
 
