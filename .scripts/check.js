@@ -47,11 +47,15 @@ function checkSyntax(file) {
 function checkKeys(file) {
   try {
     const keysToCheck = getKeys(file)
+    const missingKeys = []
 
     for (const key of truthFileKeys) {
       if (!keysToCheck.includes(key))
-        throw new Error(`Missing key: ${key}`)
+        missingKeys.push(key)
     }
+
+    if (missingKeys.length > 0)
+      throw new Error(`Missing keys:\n${missingKeys.map(v => `  • ${v}`).join('\n')}`)
   } catch(err) {
     console.error(err.message)
     process.exit(1)
