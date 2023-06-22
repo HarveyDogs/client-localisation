@@ -9,6 +9,7 @@ const truthFileKeys = getKeys(truthFile)// Source of truth keys
 
 // The files to check. Only the pr's changed files will be checked
 const filesToCheck = process.argv.slice(2)
+  .filter(v => /bundle_[a-z]+\.properties/.test(v))
   .map(v => ({ name: v, data: fs.readFileSync(v, 'utf-8') }))
 
 // Just to track if there is any error
