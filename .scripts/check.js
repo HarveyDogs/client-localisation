@@ -9,7 +9,11 @@ const truthFileKeys = getKeys(truthFile)// Source of truth keys
 
 // The files to check. Only the pr's changed files will be checked
 const filesToCheck = process.argv.slice(2)
-  .map(v => fs.readFileSync(v, 'utf-8'))
+  .filter(v => /bundle_[a-z]+\.properties/.test(v))
+  .map(v => ({ name: v, data: fs.readFileSync(v, 'utf-8') }))
+
+// Just to track if there is any error
+let error = false
 
 /**
  * Checks for syntax error
@@ -17,8 +21,10 @@ const filesToCheck = process.argv.slice(2)
  * @param {string} file
  */
 function checkSyntax(file) {
+  let innerError = false
+
   try {
-    const lines = file.split('\n')
+    const lines = file.data.split('\n')
     let currentLine = 0
 
     for (const line of lines) {
@@ -29,13 +35,16 @@ function checkSyntax(file) {
 
       // Check for invalid syntax
       if (!/^[\w.-]+\s*=\s*.+$/g.test(line)) {
-        throw new Error(`Invalid syntax at line ${currentLine}\n  > ${line.trim()}`)
+        throw new Error(`Invalid syntax at line ${currentLine} (${file.name})\n  > ${line.trim()}`)
       }
     }
   } catch(err) {
     console.error(err.message)
-    process.exit(1)
+    error = true
+    innerError = true
   }
+
+  return innerError
 }
 
 /**
@@ -45,8 +54,10 @@ function checkSyntax(file) {
  * @param {string} file
  */
 function checkKeys(file) {
+  let innerError = false
+
   try {
-    const keysToCheck = getKeys(file)
+    const keysToCheck = getKeys(file.data)
     const missingKeys = []
 
     for (const key of truthFileKeys) {
@@ -55,11 +66,14 @@ function checkKeys(file) {
     }
 
     if (missingKeys.length > 0)
-      throw new Error(`Missing keys:\n${missingKeys.map(v => `  • ${v}`).join('\n')}`)
+      throw new Error(`Missing keys (${file.name}):\n${missingKeys.map(v => `  • ${v}`).join('\n')}`)
   } catch(err) {
     console.error(err.message)
-    process.exit(1)
+    error = true
+    innerError = true
   }
+
+  return innerError
 }
 
 /**
@@ -74,7 +88,17 @@ function getKeys(file) {
     .map(v => v.split('=')[0].trim())
 }
 
+// Check all the files
 for (const file of filesToCheck) {
-  checkSyntax(file)
-  checkKeys(file)
+  const syntaxErr = checkSyntax(file)
+  const keysErr = checkKeys(file)
+
+  if (syntaxErr || keysErr) {
+    console.log()
+  }
+}
+
+// Exit with an error if there is one
+if (error) {
+  process.exit(1)
 }
